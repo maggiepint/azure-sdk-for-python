@@ -59,6 +59,11 @@ from ._serialization import (
     _create_message,
     _service_bus_error_handler)
 
+from .models import (
+    Message
+)
+
+_ERROR_NOT_MESSAGE_ = '{0} is not a control_client.Message. Are you calling the wrong API? See https://github.com/Azure/azure-sdk-for-python/blob/master/doc/servicebus.rst'
 
 class ServiceBusService(object):  # pylint: disable=too-many-public-methods
 
@@ -159,6 +164,11 @@ class ServiceBusService(object):  # pylint: disable=too-many-public-methods
     def format_transfer_dead_letter_topic_name(topic_name):
         """Get the dead letter name of this topic"""
         return topic_name + '/$Transfer' + '/$DeadLetterQueue'
+    
+    @staticmethod
+    def _validate_legacy_message(param_name, param):
+        if isinstance(param, Message) == False:
+            raise TypeError(_ERROR_NOT_MESSAGE_.format(param_name))
 
     # Backwards compatibility:
     # account_key and issuer used to be stored on the service class, they are
@@ -656,6 +666,7 @@ class ServiceBusService(object):  # pylint: disable=too-many-public-methods
         '''
         _validate_not_none('topic_name', topic_name)
         _validate_not_none('message', message)
+        _validate_legacy_message('message', message)
         request = HTTPRequest()
         request.method = 'POST'
         request.host = self._get_host()

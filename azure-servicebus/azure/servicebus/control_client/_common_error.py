@@ -10,7 +10,6 @@ from azure.common import (
     AzureMissingResourceHttpError,
 )
 
-
 _ERROR_CONFLICT = 'Conflict ({0})'
 _ERROR_NOT_FOUND = 'Not found ({0})'
 _ERROR_UNKNOWN = 'Unknown error ({0})'
@@ -65,3 +64,4 @@ def _validate_type_bytes(param_name, param):
 def _validate_not_none(param_name, param):
     if param is None:
         raise ValueError(_ERROR_VALUE_NONE.format(param_name))
+
