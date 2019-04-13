@@ -1274,6 +1274,17 @@ class ServiceBusServiceBusTest(ServiceBusTestCase):
         self.sbs.send_topic_message(self.topic_name, sent_msg)
 
         # Assert
+    
+    @record
+    def test_send_topic_message_failure(self):
+        #Arrange
+        self._create_topic_and_subscription(self.topic_name, 'MySubscription')
+        sent_msg = ''
+        #Act
+        with self.assertRaises(TypeError):
+            self.sbs.send_topic_message(self.topic_name, sent_msg)
+
+        #Assert
 
     @record
     def test_send_topic_message_batch(self):
